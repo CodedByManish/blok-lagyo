@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting to eSewa...</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f3f4f6; }
+        .loader-box { text-align: center; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #60bb46; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body onload="document.forms['esewa_form'].submit()">
+
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <h2>Redirecting to eSewa Secure Payment</h2>
+        <p>Please do not refresh or close this page.</p>
+
+        <form name="esewa_form" action="{{ esewa_url }}" method="POST">
+            {% csrf_token %}
+            {{ esewa_form|safe }}
+            <noscript>
+                <button type="submit" class="btn btn-success">Click here if not redirected</button>
+            </noscript>
+        </form>
+    </div>
+
+</body>
+</html>

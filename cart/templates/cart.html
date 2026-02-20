@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-black mb-10 text-gray-900">Your Cart</h1>
+
+    <div class="flex flex-col lg:flex-row justify-between gap-8 items-start">
+        
+        <div class="w-full lg:w-[60%] space-y-8">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-4">Review Items</h2>
+                
+                <div class="space-y-10 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                    {% for item in cart_items %}
+                    <div class="relative flex flex-col md:flex-row gap-6 items-start pb-6 border-b border-gray-50 last:border-0">
+                        
+                        <div class="absolute top-0 right-0">
+                            <button type="button" onclick="deleteItem('{{ item.product.id }}')" class="text-gray-400 hover:text-red-500 transition-colors p-1" title="Remove Item">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="w-32 text-center flex-shrink-0">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-32 h-24 object-cover rounded-2xl shadow-sm">
+                            <span class="text-sm font-bold text-gray-400 mt-2 block">{{ item.product.category|title }}</span>
+                        </div>
+
+                        <div class="flex-grow space-y-3 pr-8"> <div class="flex justify-between items-start">
+                                <h4 class="text-lg font-bold text-gray-800 capitalize leading-tight">{{ item.product.name }} </h4>
+                                <span class="text-lg font-bold text-gray-700  ml-2">Rs {{ item.subtotal }}</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <span class="text-gray-500 font-medium">Quantity</span>
+                                <div class="flex items-center border rounded-lg bg-gray-50 overflow-hidden">
+                                    <button type="button" 
+                                            onclick="updateQty('{{ item.product.id }}', -1)" 
+                                            class="px-3 py-1 hover:bg-orange-100 hover:text-orange-600 transition-colors font-bold">-</button>
+                                    
+                                    <span class="px-4 py-1 font-bold text-sm text-gray-900" id="qty-{{ item.product.id }}">{{ item.quantity }}</span>
+                                    
+                                    <button type="button" 
+                                            onclick="updateQty('{{ item.product.id }}', 1)" 
+                                            class="px-3 py-1 hover:bg-orange-100 hover:text-orange-600 transition-colors font-bold">+</button>
+                                </div>
+
+                                <form id="form-{{ item.product.id }}" action="{% url 'cart:adjust_cart' item.product.id %}" method="POST" class="hidden">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" id="input-{{ item.product.id }}" value="{{ item.quantity }}">
+                                </form>
+                            </div>
+
+                            <div class="pt-2">
+                                <label class="text-sm font-bold text-gray-700 block mb-1">Special Instructions ?</label>
+                                <input type="text" form="checkout-form" name="instructions_{{ item.product.id }}" placeholder="E.g. No onions, extra spicy..." class="w-full md:w-3/4 px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all">
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-20">
+                        <p class="font-bold text-gray-500 text-xl">Your cart is feeling light...</p>
+                        <a href="{% url 'index' %}" class="text-orange-600 hover:underline mt-2 block">Go find some delicious food!</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <aside class="w-full lg:w-[30%]">
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 sticky top-24">
+                <h2 class="text-2xl font-black mb-8 text-gray-900">Order Details</h2>
+                
+                <div class="space-y-4 text-gray-600 font-bold">
+                    <div class="flex justify-between">
+                        <span>Subtotal Price:</span>
+                        <span>Rs {{ total }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Delivery fee:</span>
+                        <span>Rs {{ delivery_fee }}</span>
+                    </div>
+                    <div class="flex justify-between text-orange-600">
+                        <span>Discount:</span>
+                        <span>- Rs {{ discount }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between text-2xl font-black text-gray-900 pt-8 border-t border-gray-100">
+                        <span>Total Price</span>
+                        <span>Rs {{ final_total }}</span>
+                    </div>
+                </div>
+
+                {% if cart_items %}
+                <form id="checkout-form" method="POST" action="{% url 'checkout:checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full mt-10 bg-orange-600 text-white py-4 rounded-2xl text-xl font-black shadow-lg shadow-orange-200 hover:bg-orange-700 transition-all active:scale-95 transform">
+                        Place Order Now
+                    </button>
+                </form>
+                {% else %}
+                <a href="{% url 'index' %}" class="w-full mt-10 block text-center bg-gray-100 text-gray-400 py-4 rounded-2xl text-xl font-black cursor-not-allowed">
+                    Continue Shopping
+                </a>
+                {% endif %}
+            </div>
+        </aside>
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f9fafb; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+</style>
+
+<script>
+function updateQty(productId, change) {
+    const qtySpan = document.getElementById('qty-' + productId);
+    const qtyInput = document.getElementById('input-' + productId);
+    const form = document.getElementById('form-' + productId);
+    
+    let currentQty = parseInt(qtySpan.innerText);
+    let newQty = currentQty + change;
+    
+    // Constraint: Prevent quantity from going below 1
+    if (newQty >= 1) {
+        qtySpan.innerText = newQty; 
+        qtyInput.value = newQty;    
+        form.submit();              
+    }
+}
+
+function deleteItem(productId) {
+    if (confirm('Remove this item from your cart?')) {
+        const qtyInput = document.getElementById('input-' + productId);
+        const form = document.getElementById('form-' + productId);
+        
+        // Setting quantity to 0 triggers the deletion logic in your adjust_cart view
+        qtyInput.value = 0;
+        form.submit();
+    }
+}
+</script>
+{% endblock %}

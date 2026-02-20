@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bhok Lagyo | Food Delivery Birtamod{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* Glassmorphism Navigation */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        /* Active Cart Pulse */
+        @keyframes shadow-pulse {
+            0% { box-shadow: 0 0 0 0px rgba(234, 88, 12, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+        }
+        .cart-badge-pulse {
+            animation: shadow-pulse 2s infinite;
+        }
+
+        /* Custom Transition */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #ea580c;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hero-text {
+            font-family: 'Great Vibes', cursive;
+        }
+    </style>
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-[#FCFCFC] text-gray-900">
+    
+    <nav class="glass-nav sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="{% url 'index' %}" class="flex items-center gap-3 group">
+                        <img src="{{ MEDIA_URL }}images/logo.png" alt="Bhok Lagyo Logo" class="h-12 w-auto transform group-hover:scale-105 transition-transform duration-300">
+                        <span class="hidden sm:block text-2xl font-black tracking-tighter text-gray-900 group-hover:text-orange-600 transition-colors">
+                            BHOK<span class="text-orange-600">LAGYO</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'products:products' %}" class="nav-link text-sm font-bold text-gray-700 hover:text-orange-600 uppercase tracking-wider">Menu</a>
+                        
+                        <a href="{% url 'cart:view_cart' %}" class="relative p-2 bg-gray-50 rounded-full hover:bg-orange-50 transition-colors group">
+                            <i data-lucide="shopping-bag" class="w-6 h-6 text-gray-700 group-hover:text-orange-600"></i>
+                            {% if product_count > 0 %}
+                                <span class="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full cart-badge-pulse">
+                                    {{ product_count }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+
+                    <div class="h-6 w-px bg-gray-200 mx-2"></div>
+
+                    <div class="flex items-center gap-4">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2 group">
+                                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 overflow-hidden">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                        <i data-lucide="user" class="w-4 h-4 text-orange-600"></i>
+                                    {% endif %}
+                                </div>
+                                <span class="text-sm font-bold text-gray-700 group-hover:text-orange-600">{{ user.username }}</span>
+                            </a>
+                            <a href="{% url 'accounts:logout' %}" class="px-6 py-2.5 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-200 active:scale-95">
+                                Log Out
+                            </a>
+                        {% else %}
+                            <a href="{% url 'accounts:register' %}" class="text-sm font-bold text-gray-700 hover:text-orange-600 uppercase tracking-widest">Sign Up</a>
+                            <a href="{% url 'accounts:login' %}" class="px-8 py-3 bg-orange-600 text-white text-sm font-black uppercase tracking-widest rounded-2xl hover:bg-orange-700 transition-all shadow-xl shadow-orange-100 active:scale-95">
+                                Log In
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="p-2 text-gray-600">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="min-h-screen">
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                {% for message in messages %}
+                    <div class="p-4 rounded-2xl {% if message.tags == 'success' %}bg-green-50 text-green-700 border border-green-100{% else %}bg-red-50 text-red-700 border border-red-100{% endif %} font-bold text-sm mb-4 animate-bounce">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <img src="{{ MEDIA_URL }}images/logo.png" alt="Logo" class="h-10 w-auto">
+                        <span class="text-xl font-black tracking-tighter">BHOKLAGYO</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-medium leading-relaxed">
+                        The ultimate food destination in Birtamod. We bring the flavors of the city's best kitchens directly to your doorstep.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li class="text-sm font-bold text-gray-600">Our Menu</li>
+                        <li class="text-sm font-bold text-gray-600">Restaurants</li>
+                        <li class="text-sm font-bold text-gray-600">Special Offers</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Support</h4>
+                    <ul class="space-y-4">
+                        <li class="text-sm font-bold text-gray-600">Help Center</li>
+                        <li class="text-sm font-bold text-gray-600">Privacy Policy</li>
+                        <li class="text-sm font-bold text-gray-600">Terms of Service</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Follow Us</h4>
+                    <div class="flex gap-4 mb-8">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm font-black text-gray-900">+977-9800000000</p>
+                    <p class="text-sm font-bold text-gray-500">Birtamod, Jhapa, Nepal</p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-50 text-center">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                    &copy; 2024-2026 BhokLagyo™ Ltd. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle (Simple Logic)
+        const btn = document.getElementById('mobile-menu-button');
+        btn.addEventListener('click', () => {
+            // You can add a mobile menu drawer here if needed
+            alert('Mobile menu feature coming soon!');
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

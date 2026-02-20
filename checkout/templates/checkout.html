@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex items-center gap-4 mb-10">
+        <a href="{% url 'cart:view_cart' %}" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <h1 class="text-3xl font-black text-gray-900">Delivery Details</h1>
+    </div>
+
+    <form method="POST" action="{% url 'checkout:checkout' %}" class="flex flex-col lg:flex-row justify-between gap-12 items-start">
+        {% csrf_token %}
+
+        <div class="w-full lg:w-[60%] space-y-8">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-4">Where should we deliver?</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for field in order_form %}
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-bold text-gray-600 px-1">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ field.errors.as_text }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-50">
+                    <label class="text-sm font-bold text-gray-600 px-1 block mb-2">Delivery Instructions (Optional)</label>
+                    <textarea 
+                        name="delivery_notes" 
+                        maxlength="150" 
+                        rows="3" 
+                        placeholder="E.g. Ring the bell twice, leave it at the white gate, etc."
+                        class="w-full p-4 border-2 border-gray-100 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none bg-gray-50 font-medium resize-none transition-all"
+                    ></textarea>
+                    <div class="flex justify-end">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Max 150 Characters</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="w-full lg:w-[30%]">
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 sticky top-24">
+                <h2 class="text-2xl font-black mb-6 text-gray-900">Summary</h2>
+                
+                <div class="space-y-4 mb-8 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                    {% for item in cart_items %}
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-600 font-bold">{{ item.quantity }}x {{ item.product.name }}</span>
+                        <span class="text-gray-900 font-black">Rs {{ item.subtotal }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="space-y-3 pt-6 border-t border-gray-100 text-gray-600 font-bold">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span>Rs {{ total }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Delivery fee</span>
+                        <span>Rs {{ delivery_fee }}</span>
+                    </div>
+                    <div class="flex justify-between text-orange-600 text-sm">
+                        <span>Discount</span>
+                        <span>- Rs {{ discount }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between text-2xl font-black text-gray-900 pt-6 mt-4 border-t border-gray-100">
+                        <span>Total</span>
+                        <span>Rs {{ final_total }}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mt-10">
+                    <button type="submit" name="payment_method" value="esewa" class="w-full bg-[#60bb46] text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-green-700 transition-all active:scale-95">
+                        Pay with eSewa
+                    </button>
+                    
+                    <button type="submit" name="payment_method" value="khalti" formaction="{% url 'checkout:khalti_checkout' %}" class="w-full bg-[#5C2D91] text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-purple-900 transition-all active:scale-95">
+                        Pay with Khalti
+                    </button>
+                </div>
+                
+                <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest mt-6">
+                    Redirecting eSewa Gateway...
+                </p>
+            </div>
+        </aside>
+    </form>
+</div>
+
+<style>
+    /* Styling for Django Form Widgets & Placeholders */
+    input[type="text"], input[type="tel"], input[type="email"], select, textarea {
+        width: 100%;
+        padding: 0.85rem 1.25rem;
+        border: 2px solid #f9fafb;
+        border-radius: 1.25rem;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+        background-color: #f9fafb;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    input::placeholder, textarea::placeholder {
+        color: #9ca3af;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    input:focus, textarea:focus {
+        border-color: #ea580c;
+        background-color: #ffffff;
+        box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.1);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+</style>
+{% endblock %}

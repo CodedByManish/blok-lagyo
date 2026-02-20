@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div {% if not user.is_authenticated %}onclick="window.location.href='{% url 'accounts:login' %}'" class="cursor-pointer"{% endif %}>
+    
+    <section class="max-w-7xl mx-auto mt-6 px-4">
+        <div class="relative w-full flex items-center justify-center">
+            <div class="relative w-full h-[60vh] sm:h-[75vh] rounded-tl-[3rem] rounded-tr-[3rem] rounded-bl-[3rem] rounded-br-[150px] sm:rounded-br-[300px] overflow-hidden shadow-2xl bg-cover bg-center"
+                 style="background-image: url('{{ MEDIA_URL }}images/hero.png');">
+                
+                <div class="absolute inset-0 bg-gradient-to-l from-black/70 via-black/20 to-transparent"></div>
+
+                <div class="absolute right-8 sm:right-20 top-1/2 -translate-y-1/2 text-right z-10">
+                    <h2 class="text-xs sm:text-sm font-black text-orange-400 uppercase tracking-[0.4em] mb-4">
+                        Birtamod's Premier Food Hub
+                    </h2>
+                    <h1 class="text-6xl sm:text-8xl lg:text-9xl font-black text-white leading-none tracking-tighter">
+                        BHOK <br> <span class="text-orange-500">LAGYO?</span>
+                    </h1>
+                    <p class="mt-6 text-gray-200 text-lg sm:text-xl font-bold ml-auto max-w-md">
+                        Delicious meals from your favorite local spots, delivered straight to your door.
+                    </p>
+                    <div class="mt-10 flex justify-end">
+                        <a href="{% url 'products:products' %}" 
+                        class="bg-orange-600 text-white px-10 py-4 rounded-2xl font-black text-lg 
+                        shadow-xl hover:bg-orange-700 transition-all active:scale-95 
+                        inline-block mr-20 sm:mr-32">
+                            ORDER NOW
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto mt-20 pt-6 px-4">
+        <h3 class="text-3xl font-bold mb-10 text-gray-800 border-l-4 border-orange-500 pl-6">Inspiration for your first order</h3>
+        
+        <style>
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            .slide-dot.active { background-color: #ea580c; width: 32px; }
+            .slide-dot { transition: all 0.3s ease; }
+        </style>
+
+        <div class="flex overflow-x-auto no-scrollbar pb-8 gap-10 snap-x snap-mandatory scroll-smooth">
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=momo{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/momo.png" alt="momo" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">MoMo</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=pizza{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/pizza.png" alt="pizza" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Pizza</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=burger{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/burger.png" alt="burger" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Burger</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=samosa{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/samosa.png" alt="samosa" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Samosa</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=tuna-salad{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/tuna_salad.png" alt="tuna salad" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Tuna Salad</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=tofu-fry{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/tofu_fry.png" alt="tofu fry" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Tofu Fry</span>
+            </a>
+
+            <a href="{% if user.is_authenticated %}{% url 'products:products' %}?category=thali{% else %}{% url 'accounts:login' %}{% endif %}" class="flex-none w-56 snap-center flex flex-col items-center gap-4 group">
+                <div class="w-48 h-48 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:border-orange-500 transition-all duration-300">
+                    <img src="{{ MEDIA_URL }}images/thali_food.png" alt="thali food" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform">
+                </div>
+                <span class="text-lg font-bold text-gray-700 group-hover:text-orange-600">Thakali Food</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto mt-20 px-4">
+        <div class="flex items-center gap-3 mb-8">
+            <span class="text-3xl">🔥</span>
+            <h3 class="text-3xl font-black text-gray-900 tracking-tight">Hot Deals</h3>
+        </div>
+        
+        <div class="relative group overflow-hidden rounded-[3rem] shadow-2xl">
+            <div id="deal-slider" class="flex transition-transform duration-700 ease-in-out">
+                
+                <!-- SLIDE 1 - NEWARI FEAST -->
+                <div class="min-w-full relative h-[600px] sm:h-[675px]">
+                    <img src="{{ MEDIA_URL }}images/poster1.png" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-12 md:p-20">
+                        <div>
+                            <span class="bg-red-600 text-white px-6 py-2 rounded-full font-black text-lg uppercase mb-4 inline-block shadow-lg">
+                                🔥 20% OFF LIMITED TIME
+                            </span>
+
+                            <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                                Authentic Newari Feast
+                            </h2>
+
+                            <p class="text-gray-300 text-xl font-bold mb-6">
+                                Experience the bold, traditional flavors of Newari cuisine.
+                            </p>
+
+                            <div class="flex items-center gap-6 mb-8">
+                                <span class="text-gray-400 text-3xl line-through font-black">
+                                    Rs. 1500
+                                </span>
+                                <span class="text-red-500 text-5xl font-black">
+                                    Rs. 1200
+                                </span>
+                            </div>
+
+                            <button class="bg-red-600 text-white px-12 py-4 rounded-2xl font-black text-xl hover:bg-white hover:text-red-600 transition-all">
+                                ORDER NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2 - BURGER BLAST -->
+                <div class="min-w-full relative h-[600px] sm:h-[675px]">
+                    <img src="{{ MEDIA_URL }}images/poster2.png" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-12 md:p-20">
+                        <div>
+                            <span class="bg-red-600 text-white px-6 py-2 rounded-full font-black text-lg uppercase mb-4 inline-block shadow-lg">
+                                🍔 MEGA BURGER DEAL – 20% OFF
+                            </span>
+
+                            <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                                Ultimate Burger Combo
+                            </h2>
+
+                            <p class="text-gray-300 text-xl font-bold mb-6">
+                                Juicy, loaded, and grilled to perfection. Bite into happiness!
+                            </p>
+
+                            <div class="flex items-center gap-6 mb-8">
+                                <span class="text-gray-400 text-3xl line-through font-black">
+                                    Rs. 1500
+                                </span>
+                                <span class="text-red-500 text-5xl font-black">
+                                    Rs. 1200
+                                </span>
+                            </div>
+
+                            <button class="bg-red-600 text-white px-12 py-4 rounded-2xl font-black text-xl hover:bg-white hover:text-red-600 transition-all">
+                                ORDER NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3 - NEWARI SPECIAL -->
+                <div class="min-w-full relative h-[600px] sm:h-[675px]">
+                    <img src="{{ MEDIA_URL }}images/poster3.png" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-12 md:p-20">
+                        <div>
+                            <span class="bg-red-600 text-white px-6 py-2 rounded-full font-black text-lg uppercase mb-4 inline-block shadow-lg">
+                                🎉 TODAY’S SPECIAL – SAVE 20%
+                            </span>
+
+                            <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                                Royal Newari Platter
+                            </h2>
+
+                            <p class="text-gray-300 text-xl font-bold mb-6">
+                                A complete traditional experience packed with authentic taste.
+                            </p>
+
+                            <div class="flex items-center gap-6 mb-8">
+                                <span class="text-gray-400 text-3xl line-through font-black">
+                                    Rs. 1500
+                                </span>
+                                <span class="text-red-500 text-5xl font-black">
+                                    Rs. 1200
+                                </span>
+                            </div>
+
+                            <button class="bg-red-600 text-white px-12 py-4 rounded-2xl font-black text-xl hover:bg-white hover:text-red-600 transition-all">
+                                ORDER NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SLIDER DOTS -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4">
+                <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white/30 slide-dot"></button>
+                <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white/30 slide-dot"></button>
+                <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white/30 slide-dot"></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto mt-20 px-4 pb-20">
+
+        <h3 class="text-2xl font-bold mb-8 text-gray-800 border-l-4 border-orange-500 pl-4">
+            Popular spots in Birtamod
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' 'pizza-ghar' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/pizza_ghar.png"
+                        alt="Pizza Ghar"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    Pizza Ghar
+                </span>
+            </div>
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' 'naivedya' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/naivedya.png"
+                        alt="Naivedya"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    Naivedya
+                </span>
+            </div>
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' 'star-cafe' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/star_cafe.png"
+                        alt="Star Cafe"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    Star Cafe
+                </span>
+            </div>
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' 'mantra-thakali' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/mantra_thakali.png"
+                        alt="Mantra Thakali"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    Mantra Thakali
+                </span>
+            </div>
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' '365-cafe' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/365_cafe.png"
+                        alt="365 Cafe"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    365 Cafe
+                </span>
+            </div>
+
+            <div onclick="window.location.href='{% if user.is_authenticated %}{% url 'products:restaurant_detail' 'mokshya' %}{% else %}{% url 'accounts:login' %}{% endif %}'"
+                class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-orange-100 hover:shadow-xl transition-all flex flex-col items-center text-center group cursor-pointer">
+                
+                <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl mb-4 overflow-hidden">
+                    <img src="{{ MEDIA_URL }}images/mokchhya.png"
+                        alt="Mokshya"
+                        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <span class="font-bold text-xl text-gray-800">
+                    Mokshya
+                </span>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+    let currentSlide = 0;
+    const sliderTrack = document.getElementById('deal-slider');
+    const dots = document.querySelectorAll('.slide-dot');
+
+    function goToSlide(n) {
+        currentSlide = n;
+        sliderTrack.style.transform = `translateX(-${n * 100}%)`;
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === n);
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % 3;
+        goToSlide(currentSlide);
+    }
+
+    goToSlide(0);
+    setInterval(nextSlide, 2000); 
+
+    if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+</script>
+{% endblock %}

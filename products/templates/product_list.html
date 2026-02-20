@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Explore Delicious Food{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+            <h1 class="text-4xl font-black text-gray-900 mb-2">Our Menu</h1>
+            <p class="text-gray-500 font-bold">Discover the best food from your favorite spots.</p>
+        </div>
+        <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+            <span class="px-4 py-2 bg-orange-500 text-white rounded-full text-sm font-bold shadow-md cursor-pointer">All</span>
+            <span class="px-4 py-2 bg-white text-gray-600 border border-gray-100 rounded-full text-sm font-bold hover:bg-orange-50 hover:text-orange-500 transition-colors cursor-pointer">Trending</span>
+            <span class="px-4 py-2 bg-white text-gray-600 border border-gray-100 rounded-full text-sm font-bold hover:bg-orange-50 hover:text-orange-500 transition-colors cursor-pointer">Offers</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {% for product in products %}
+        <div class="group bg-white rounded-[2.5rem] p-4 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <div class="relative h-56 w-full mb-4 overflow-hidden rounded-[2rem] bg-gray-100">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ product.name }}">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" class="w-full h-full object-cover">
+                {% endif %}
+                
+                <div class="absolute top-4 left-4">
+                    <span class="px-3 py-1 bg-white/90 backdrop-blur-md text-[10px] font-black text-orange-600 uppercase tracking-widest rounded-full shadow-sm">
+                        {{ product.restaurant|default:"Original" }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="px-2 pb-2">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-lg font-black text-gray-800 line-clamp-1 capitalize">{{ product.name }}</h4>
+                    <span class="text-orange-600 font-black">Rs {{ product.price }}</span>
+                </div>
+                
+                <p class="text-gray-400 text-xs font-bold leading-relaxed mb-6 line-clamp-2">
+                    {{ product.description|default:"No description available for this delicious item." }}
+                </p>
+
+                <div class="flex items-center gap-2">
+                    <a href="{% url 'products:product_detail' product.id %}" class="flex-grow text-center bg-gray-50 text-gray-900 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-100 transition-colors">
+                        View Details
+                    </a>
+                    <form action="{% url 'cart:add_to_cart' product.id %}" method="POST" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="p-3 bg-orange-500 text-white rounded-2xl hover:bg-orange-600 transition-all active:scale-90 shadow-md shadow-orange-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { display: none; }
+    .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 1; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
+</style>
+{% endblock %}
