@@ -1,5 +1,4 @@
-A professional README.md is the "front door" of your project. Since you are building a food delivery system with dual payment gateways (eSewa & Khalti), the README needs to look clean, modern, and highly technical.
-Copy and paste the code below into your README.md file:
+
 # 🍔 Blok Lagyo! (Food Delivery System)
 
 [![Django Version](https://img.shields.io/badge/django-5.0+-092e20?style=for-the-badge&logo=django)](https://www.djangoproject.com/)
