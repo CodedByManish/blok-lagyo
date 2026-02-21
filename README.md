@@ -1,82 +1,274 @@
+<div align="center">
 
-# 🍔 Blok Lagyo! (Food Delivery System)
+# 🍔 Bhok-Lagyo  
+### Django-Powered Food Delivery System  
 
-[![Django Version](https://img.shields.io/badge/django-5.0+-092e20?style=for-the-badge&logo=django)](https://www.djangoproject.com/)
-[![Python Version](https://img.shields.io/badge/python-3.11+-3776ab?style=for-the-badge&logo=python)](https://www.python.org/)
-[![Payment Gateway](https://img.shields.io/badge/Payment-eSewa%20%7C%20Khalti-60bb46?style=for-the-badge)](https://esewa.com.np)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+![Django](https://img.shields.io/badge/Django-4.2+-green?logo=django)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-blue?logo=postgresql)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**Blok Lagyo!** is a high-performance, full-stack food delivery application built with Django. It features a modern UI, a seamless shopping cart experience, and integrated dual-payment gateways for the Nepalese market.
+> A secure, server-side rendered food delivery system built using Django’s MVT architecture with multi-gateway payment integration.
 
----
-
-## ✨ Key Features
-
-* 🛒 **Smart Shopping Cart:** Persistent session-based cart management.
-* 💳 **Dual Payment Integration:**
-    * **eSewa v2:** Integrated via HMAC-SHA256 signature for secure transactions.
-    * **Khalti v2:** Server-side initiation for seamless ePayment flow.
-* 📍 **Order Management:** Automated order creation and line-item tracking.
-* 🎨 **Modern UI:** Crafted with Tailwind CSS for a premium look and feel.
-* 🔒 **Secure Checkout:** User authentication and server-side amount verification.
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+## 📌 Table of Contents
 
-| Frontend | Backend | Database | Payments |
-| :--- | :--- | :--- | :--- |
-| Tailwind CSS | Django | SQLite / PostgreSQL | eSewa v2 |
-| JavaScript (ES6) | Python 3.11+ | Django ORM | Khalti v2 |
+- [📖 Introduction](#-introduction)
+- [⚙️ System Architecture](#️-system-architecture)
+- [🚀 Key Features](#-key-features)
+- [💳 Payment Integration](#-payment-integration)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [🖥️ Installation & Setup](#️-installation--setup)
+- [🛡️ Security Measures](#️-security-measures)
+- [📂 Project Structure](#-project-structure)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [📸 Screenshots (Optional)](#-screenshots-optional)
 
 ---
 
-## 🚀 Installation & Setup
+## 📖 Introduction
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/yourusername/blok-lagyo.git](https://github.com/yourusername/blok-lagyo.git)
-   cd blok-lagyo
+**Bhok-Lagyo** is a robust food delivery application built using **Django (MVT architecture)**.  
+It focuses on **security, financial accuracy, and scalable design** while maintaining a clean and responsive UI.
 
- * Create and Activate Virtual Environment:
-   python -m venv env
-# Windows:
-.\env\Scripts\activate
-# Linux/Mac:
-source env/bin/activate
+### Users Can:
 
- * Install Dependencies:
-   pip install -r requirements.txt
+- 🛒 Browse a dynamic food catalog  
+- 🧺 Add items to a session-based persistent cart  
+- 💳 Pay securely using:
+  - eSewa  
+  - Khalti  
+  - PayPal  
 
- * Setup Environment Variables:
-   Create a .env file or update settings.py with your credentials:
-   KHALTI_SECRET_KEY = "test_secret_key_..."
-ESEWA_SECRET_KEY = "8gBm/:&EnhH.1/q"
+---
 
- * Run Migrations:
-   python manage.py makemigrations
+## ⚙️ System Architecture
+
+The system follows Django’s **Model-View-Template (MVT)** pattern.
+
+### 🔐 Authentication & User Management
+- Powered by Django’s built-in `auth` system
+- Secure login & session-based user tracking
+
+### 🍽️ Product Catalog
+- Managed inside the `Products` app
+- `models.py` defines schema
+- Full CRUD from Django Admin
+- Real-time menu updates
+
+### 🛒 Stateful Cart System
+- Uses Django **Sessions**
+- Prevents database clutter from abandoned carts
+- Cart persists even after page refresh
+
+### 🧾 Checkout & Order Persistence
+- Server-side validation prevents price tampering
+- Cart revalidated against database prices
+- Permanent storage in:
+  - `Order`
+  - `OrderLineItem`
+
+---
+
+## 💳 Payment Integration
+
+| Gateway  | Integration Method |
+|-----------|-------------------|
+| **eSewa** | Server-side signature + HTML form redirect |
+| **Khalti** | Secure Server-to-Server API handshake |
+| **PayPal** | JavaScript SDK |
+
+All payment flows ensure:
+- Server-side verification
+- Accurate Decimal-based calculations
+- Secure key handling via environment variables
+
+---
+
+## 🚀 Key Features
+
+- ✅ Persistent Cart via Sessions  
+- ✅ Multi-Gateway Payments (eSewa, Khalti, PayPal)  
+- ✅ Django Admin Dashboard  
+- ✅ Tailwind CSS Responsive UI  
+- ✅ Server-Side Checkout Validation  
+- ✅ Financial Accuracy using Python `Decimal`  
+- ✅ Clean MVT Architecture  
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer        | Technology |
+|--------------|------------|
+| Backend      | Python 3.10+, Django 4.2+ |
+| Database     | SQLite (Development), PostgreSQL (Production) |
+| Payments     | eSewa API v2, Khalti ePayment v2, PayPal SDK |
+| Frontend     | Django Templates, Tailwind CSS |
+| Server Logic | 99.5% Python, 0.5% JavaScript |
+
+---
+
+## 🖥️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/CodedByManish/blok-lagyo.git
+cd blok-lagyo
+```
+
+---
+
+### 2️⃣ Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+Activate:
+
+**Mac/Linux**
+```bash
+source venv/bin/activate
+```
+
+**Windows**
+```bash
+venv\Scripts\activate
+```
+
+---
+
+### 3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4️⃣ Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+KHALTI_SECRET_KEY=your_test_key
+ESEWA_SECRET_KEY=8gBm/:&EnhH.1/q
+PAYPAL_TEST=True
+```
+
+---
+
+### 5️⃣ Run Migrations
+
+```bash
+python manage.py makemigrations
 python manage.py migrate
+```
 
- * Start the Engine:
-   python manage.py runserver
+---
 
-💳 Payment Integration Logic
-eSewa (v2)
-Uses a client-side POST redirection. The signature is generated using HMAC-SHA256 hashing of total_amount, transaction_uuid, and product_code.
-Khalti (v2)
-Uses a server-to-server API call. We initiate the payment by sending a JSON payload to a.khalti.com and receiving a payment_url for user redirection.
-📸 Screenshots
-| Checkout Page | Payment Redirection |
-|---|---|
-|  |  |
-🤝 Contributing
- * Fork the Project
- * Create your Feature Branch (git checkout -b feature/AmazingFeature)
- * Commit your Changes (git commit -m 'Add some AmazingFeature')
- * Push to the Branch (git push origin feature/AmazingFeature)
- * Open a Pull Request
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
-<p align="center">
-Developed by Manish in Nepal 🇳🇵
-</p>
+### 6️⃣ Start Development Server
 
+```bash
+python manage.py runserver
+```
+
+Visit:
+
+```
+http://127.0.0.1:8000/
+```
+
+---
+
+## 🛡️ Security Measures
+
+- 🔐 CSRF Protection enabled on all POST requests  
+- 🧮 Server-side price recalculation during checkout  
+- 🔑 API keys stored in environment variables  
+- 🛑 Prevention of client-side price manipulation  
+- 💰 Decimal-based currency calculations  
+
+---
+
+## 📂 Project Structure
+
+```bash
+blok-lagyo/
+│
+├── products/          # Product catalog app
+├── orders/            # Order & checkout logic
+├── payments/          # Payment gateway integrations
+├── templates/         # Django Templates
+├── static/            # CSS, JS, Images
+├── docs/              # Screenshots & demo assets
+├── manage.py
+└── requirements.txt
+```
+
+---
+
+## 📸 Screenshots (Optional)
+
+Create a `docs/` folder and add:
+
+```markdown
+![Homepage](docs/homepage.png)
+![Checkout](docs/checkout.png)
+![Payment Redirect](docs/paypal_redirect.png)
+```
+
+You may also include:
+- Admin dashboard screenshot
+- Cart page
+- Payment success page
+- Demo GIF of checkout flow
+
+---
+
+## 🤝 Contributing
+
+1. Fork the project  
+2. Create your feature branch  
+
+```bash
+git checkout -b feature/AmazingFeature
+```
+
+3. Commit your changes  
+>>>>>>> 1c98f8f (Add PayPal integration and update README.md)
+
+```bash
+git commit -m "Add AmazingFeature"
+```
+
+4. Push to branch  
+
+```bash
+git push origin feature/AmazingFeature"
+```
+
+5. Open a Pull Request  
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**.  
+See `LICENSE` for more information.
+
+---
+
+<div align="center">
+
+### ⭐ If you like this project, give it a star!
+
+Built by **CodedByManish** using Django
+
+</div>

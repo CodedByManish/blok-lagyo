@@ -88,6 +88,13 @@
                     <button type="submit" name="payment_method" value="khalti" formaction="{% url 'checkout:khalti_checkout' %}" class="w-full bg-[#5C2D91] text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-purple-900 transition-all active:scale-95">
                         Pay with Khalti
                     </button>
+                    
+                    <button type="submit"
+                            formaction="{% url 'checkout:paypal_checkout' %}"
+                            class="w-full bg-blue-600 text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-blue-800 transition-all active:scale-95">
+                        Pay with PayPal
+                    </button>
+
                 </div>
                 
                 <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest mt-6">

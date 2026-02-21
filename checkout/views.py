@@ -7,11 +7,16 @@ from django.conf import settings
 from django.utils import timezone
 from decimal import Decimal
 
+#Paypal imports
+from paypal.standard.forms import PayPalPaymentsForm
+from django.views.decorators.csrf import csrf_exempt
+import uuid
+
 # Internal imports
 from .models import Order, OrderLineItem
 from .forms import OrderForm
 from django_esewa import EsewaPayment
-from products.models import Product  # Standard import
+from products.models import Product  #
 
 @login_required
 def checkout(request):
@@ -171,3 +176,72 @@ def esewa_success(request):
 def esewa_failure(request):
     messages.error(request, "eSewa Payment failed.")
     return redirect(reverse('checkout:checkout'))
+
+
+
+#------------------------------------------------
+#------------------- PAYPAL VIEWS ------------------
+#------------------------------------------------
+@login_required
+def paypal_checkout(request):
+    cart = request.session.get('cart', {})
+    if not cart:
+        messages.error(request, "Cart is empty.")
+        return redirect('products:index')
+
+    total = Decimal('0.00')
+    for product_id, quantity in cart.items():
+        product = get_object_or_404(Product, pk=product_id)
+        total += product.price * quantity
+
+    delivery_fee = (total * Decimal('0.15')).quantize(Decimal('0.01'))
+    discount = (total * Decimal('0.05')).quantize(Decimal('0.01'))
+    final_total = (total + delivery_fee - discount).quantize(Decimal('0.01'))
+
+    if request.method == "POST":
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            order = order_form.save(commit=False)
+            order.user = request.user
+            order.total_paid = final_total
+            order.save()
+
+            for product_id, quantity in cart.items():
+                product = get_object_or_404(Product, pk=product_id)
+                OrderLineItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=quantity
+                )
+
+            host = request.get_host()
+
+            paypal_dict = {
+                "business": settings.PAYPAL_RECEIVER_EMAIL,
+                "amount": str(final_total),
+                "item_name": f"Food Order #{order.id}",
+                "invoice": str(order.id),
+                "currency_code": "USD",
+                "notify_url": f"http://{host}/checkout/paypal/",
+                "return_url": f"http://{host}{reverse('checkout:paypal_success')}",
+                "cancel_return": f"http://{host}{reverse('checkout:paypal_cancel')}",
+                "custom": str(order.id),
+            }
+
+            form = PayPalPaymentsForm(initial=paypal_dict)
+            return render(request, "paypal_redirect.html", {"form": form})
+
+    return redirect('checkout:checkout')
+
+@csrf_exempt
+@login_required
+def paypal_success(request):
+    messages.success(request, "Payment completed successfully!")
+    request.session['cart'] = {}
+    return redirect('products:index')
+
+@csrf_exempt
+@login_required
+def paypal_cancel(request):
+    messages.error(request, "Payment cancelled.")
+    return redirect('checkout:checkout')

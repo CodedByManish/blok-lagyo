@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Payment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-white shadow-2xl rounded-3xl p-12 max-w-lg w-full text-center relative overflow-hidden">
+
+        <!-- Decorative Glow -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-200 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-200 rounded-full blur-3xl opacity-30"></div>
+
+        <!-- Logo -->
+        <div class="flex justify-center mb-6">
+            <div class="bg-blue-600 text-white p-4 rounded-full shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 8c-2.21 0-4 1.79-4 4 0 2 1.5 3.5 3.5 3.9V18h1v-2.1c2-.4 3.5-1.9 3.5-3.9 0-2.21-1.79-4-4-4z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-3xl font-black text-gray-800 mb-4">
+            Redirecting to PayPal
+        </h1>
+
+        <p class="text-gray-500 mb-8">
+            Please wait while we securely redirect you to PayPal to complete your payment.
+            Do not refresh or close this page.
+        </p>
+
+        <!-- Spinner -->
+        <div class="flex justify-center mb-8">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
+        </div>
+
+        <!-- Secure Badge -->
+        <div class="flex justify-center items-center gap-2 text-green-600 font-semibold text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                 viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                      d="M10 2a1 1 0 00-.894.553L7.382 6H4a1 1 0 000 2h3.382l1.724 3.447A1 1 0 0010 12a1 1 0 00.894-.553L12.618 8H16a1 1 0 100-2h-3.382l-1.724-3.447A1 1 0 0010 2z"
+                      clip-rule="evenodd"/>
+            </svg>
+        </div>
+
+        <!-- PayPal Form -->
+        <div class="hidden">
+            {{ form.render }}
+        </div>
+
+        <noscript>
+            <div class="mt-6">
+                {{ form.render }}
+            </div>
+        </noscript>
+    </div>
+
+    <script>
+        window.onload = function () {
+            document.forms[0].submit();
+        };
+    </script>
+
+</body>
+</html>
+
+
+Email: sb-s5fsa49538431@personal.example.com
+Password: 8kk&QeGI
+

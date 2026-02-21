@@ -21,7 +21,8 @@ INSTALLED_APPS = [
     'accounts',
     'products',
     'cart',
-    'checkout',
+    'checkout.apps.CheckoutConfig',
+    'paypal.standard.ipn',
 ]
 
 # Middleware
@@ -112,3 +113,8 @@ ESEWA_CANCEL_URL = "http://127.0.0.1:8000/checkout/esewa_failure/"
 KHALTI_SECRET_KEY = "test_secret_key_68791341fdd94846a146f0457ff7b455"
 KHALTI_PUBLIC_KEY = "test_public_key_dc74e0fd57cb46cd93832aee0a507256"
 KHALTI_VERIFY_URL = "https://khalti.com/api/v2/payment/verify/"
+
+#PAYPAL
+PAYPAL_RECEIVER_EMAIL = "sb-d7rbi49569134@business.example.com"
+PAYPAL_TEST = True
+

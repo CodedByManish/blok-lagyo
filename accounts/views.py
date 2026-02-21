@@ -53,7 +53,7 @@ def logout(request):
 
 @login_required
 def profile(request):
-    orders = Order.objects.filter(user=request.user).order_by('-date')
+    orders = Order.objects.filter(user=request.user).order_by('-date')[:10]
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
