@@ -118,3 +118,6 @@ KHALTI_VERIFY_URL = "https://khalti.com/api/v2/payment/verify/"
 PAYPAL_RECEIVER_EMAIL = "sb-d7rbi49569134@business.example.com"
 PAYPAL_TEST = True
 
+# Email: sb-s5fsa49538431@personal.example.com
+# Password: 8kk&QeGI 
+#https://prezi.com/p/edit/hzach9rvtqxo/

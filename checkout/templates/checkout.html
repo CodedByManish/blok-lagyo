@@ -12,10 +12,10 @@
         <h1 class="text-3xl font-black text-gray-900">Delivery Details</h1>
     </div>
 
-    <form method="POST" action="{% url 'checkout:checkout' %}" class="flex flex-col lg:flex-row justify-between gap-12 items-start">
+    <form method="POST" action="{% url 'checkout:checkout' %}" id="checkout-form" class="flex flex-col lg:flex-row justify-between gap-8 items-start">
         {% csrf_token %}
 
-        <div class="w-full lg:w-[60%] space-y-8">
+        <div class="w-full lg:w-[55%] space-y-8">
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                 <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-4">Where should we deliver?</h2>
                 
@@ -37,7 +37,7 @@
                         name="delivery_notes" 
                         maxlength="150" 
                         rows="3" 
-                        placeholder="E.g. Ring the bell twice, leave it at the white gate, etc."
+                        placeholder="E.g. Ring the bell twice, leave it at the white gate..."
                         class="w-full p-4 border-2 border-gray-100 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none bg-gray-50 font-medium resize-none transition-all"
                     ></textarea>
                     <div class="flex justify-end">
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <aside class="w-full lg:w-[30%]">
+        <aside class="w-full lg:w-[40%]">
             <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 sticky top-24">
                 <h2 class="text-2xl font-black mb-6 text-gray-900">Summary</h2>
                 
@@ -80,25 +80,32 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 mt-10">
-                    <button type="submit" name="payment_method" value="esewa" class="w-full bg-[#60bb46] text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-green-700 transition-all active:scale-95">
-                        Pay with eSewa
-                    </button>
+                <div class="mt-10">
+                    <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Select Payment Method</h3>
                     
-                    <button type="submit" name="payment_method" value="khalti" formaction="{% url 'checkout:khalti_checkout' %}" class="w-full bg-[#5C2D91] text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-purple-900 transition-all active:scale-95">
-                        Pay with Khalti
-                    </button>
-                    
-                    <button type="submit"
-                            formaction="{% url 'checkout:paypal_checkout' %}"
-                            class="w-full bg-blue-600 text-white py-4 rounded-2xl text-xl font-black shadow-lg hover:bg-blue-800 transition-all active:scale-95">
-                        Pay with PayPal
-                    </button>
-
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="submit" name="payment_method" value="esewa" class="payment-card group">
+                            <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-[#60bb46] transition-all bg-white overflow-hidden">
+                                <img src="{{ MEDIA_URL }}images/Esewa.png" alt="eSewa" class="h-12 w-auto object-contain transform scale-110">
+                            </div>
+                        </button>
+                        
+                        <button type="submit" name="payment_method" value="khalti" formaction="{% url 'checkout:khalti_checkout' %}" class="payment-card group">
+                            <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-[#5C2D91] transition-all bg-white">
+                                <img src="{{ MEDIA_URL }}images/khalti.png" alt="Khalti" class="h-10 w-auto object-contain">
+                            </div>
+                        </button>
+                        
+                        <button type="submit" name="payment_method" value="paypal" formaction="{% url 'checkout:paypal_checkout' %}" class="payment-card group">
+                            <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-blue-600 transition-all bg-white overflow-hidden">
+                                <img src="{{ MEDIA_URL }}images/paypal.png" alt="PayPal" class="h-full w-auto object-contain transform scale-[1.5]">
+                            </div>
+                        </button>
+                    </div>
                 </div>
                 
-                <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest mt-6">
-                    Redirecting eSewa Gateway...
+                <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest mt-8">
+                    Secure Encrypted Transaction
                 </p>
             </div>
         </aside>
@@ -106,7 +113,7 @@
 </div>
 
 <style>
-    /* Styling for Django Form Widgets & Placeholders */
+    /* Styling for Django Form Widgets */
     input[type="text"], input[type="tel"], input[type="email"], select, textarea {
         width: 100%;
         padding: 0.85rem 1.25rem;
@@ -119,12 +126,6 @@
         color: #1f2937;
     }
 
-    input::placeholder, textarea::placeholder {
-        color: #9ca3af;
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
-
     input:focus, textarea:focus {
         border-color: #ea580c;
         background-color: #ffffff;
@@ -133,5 +134,9 @@
 
     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+
+    .payment-card:active {
+        transform: scale(0.95);
+    }
 </style>
 {% endblock %}
