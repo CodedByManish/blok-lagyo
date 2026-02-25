@@ -82,28 +82,35 @@
 
                 <div class="mt-10">
                     <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Select Payment Method</h3>
-                    
-                    <div class="grid grid-cols-3 gap-3">
+    
+                    <div class="grid grid-cols-3 gap-3 mb-4">
                         <button type="submit" name="payment_method" value="esewa" class="payment-card group">
                             <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-[#60bb46] transition-all bg-white overflow-hidden">
-                                <img src="{{ MEDIA_URL }}images/Esewa.png" alt="eSewa" class="h-12 w-auto object-contain transform scale-110">
+                                <img src="{{ MEDIA_URL }}images/Esewa.png" alt="eSewa" class="h-12 w-auto object-contain transform scale-150">
                             </div>
                         </button>
                         
                         <button type="submit" name="payment_method" value="khalti" formaction="{% url 'checkout:khalti_checkout' %}" class="payment-card group">
                             <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-[#5C2D91] transition-all bg-white">
-                                <img src="{{ MEDIA_URL }}images/khalti.png" alt="Khalti" class="h-10 w-auto object-contain">
+                                <img src="{{ MEDIA_URL }}images/khalti.png" alt="Khalti" class="h-10 w-auto object-contain scale-105">
                             </div>
                         </button>
                         
                         <button type="submit" name="payment_method" value="paypal" formaction="{% url 'checkout:paypal_checkout' %}" class="payment-card group">
                             <div class="h-20 flex items-center justify-center p-2 rounded-2xl border-2 border-gray-100 group-hover:border-blue-600 transition-all bg-white overflow-hidden">
-                                <img src="{{ MEDIA_URL }}images/paypal.png" alt="PayPal" class="h-full w-auto object-contain transform scale-[1.5]">
+                                <img src="{{ MEDIA_URL }}images/paypal.png" alt="PayPal" class="h-full w-auto object-contain transform scale-[1.6]">
                             </div>
                         </button>
                     </div>
+
+                    <button type="submit" name="payment_method" value="cod" onclick="return validateAndConfirmCod(event)" class="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-200 active:scale-[0.98] flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Cash on Delivery</span>
+                    </button>
                 </div>
-                
+
                 <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-widest mt-8">
                     Secure Encrypted Transaction
                 </p>
@@ -113,7 +120,7 @@
 </div>
 
 <style>
-    /* Styling for Django Form Widgets */
+    
     input[type="text"], input[type="tel"], input[type="email"], select, textarea {
         width: 100%;
         padding: 0.85rem 1.25rem;
@@ -139,4 +146,22 @@
         transform: scale(0.95);
     }
 </style>
+
+<script>
+    function validateAndConfirmCod(event) {
+        const form = document.getElementById('checkout-form');
+        
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return false;
+        }
+
+        const confirmAction = confirm("Place order with Cash on Delivery?");
+        if (!confirmAction) {
+            event.preventDefault();
+            return false; 
+        }
+        return true; 
+    }
+</script>
 {% endblock %}

@@ -120,4 +120,3 @@ PAYPAL_TEST = True
 
 # Email: sb-s5fsa49538431@personal.example.com
 # Password: 8kk&QeGI 
-#https://prezi.com/p/edit/hzach9rvtqxo/

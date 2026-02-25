@@ -11,3 +11,4 @@ db.sqlite3
 media/
 staticfiles/
 .vscode/
+seed_data.py

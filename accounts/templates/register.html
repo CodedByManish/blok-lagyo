@@ -17,57 +17,50 @@
         
         <h2 class="text-2xl font-bold text-center mb-8">Create Account</h2>
         
-        <form method="post" class="space-y-5">
+        <form method="post" class="space-y-4">
             {% csrf_token %}
             
-            {% if user_form.non_field_errors %}
-                <div class="text-red-500 text-sm bg-red-50 p-3 rounded-lg">
-                    {{ user_form.non_field_errors }}
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" required>
                 </div>
-            {% endif %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" required>
+                </div>
+            </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                <input type="text" name="username" value="{{ user_form.username.value|default:'' }}" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" 
-                       placeholder="Choose a username" required>
-                <span class="text-red-500 text-xs">{{ user_form.username.errors }}</span>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" name="email" value="{{ user_form.email.value|default:'' }}" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" 
-                       placeholder="your@email.com" required>
+                <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" placeholder="your@email.com" required>
                 <span class="text-red-500 text-xs">{{ user_form.email.errors }}</span>
             </div>
-            
+
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <input type="password" name="password1" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" 
-                       placeholder="••••••••" required>
-                <span class="text-red-500 text-xs">{{ user_form.password1.errors }}</span>
+                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="text" name="phone_number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" required>
             </div>
-            
+
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                <input type="password" name="password2" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" 
-                       placeholder="••••••••" required>
-                <span class="text-red-500 text-xs">{{ user_form.password2.errors }}</span>
+                <label class="block text-sm font-medium text-gray-700">Address</label>
+                <textarea name="address" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" rows="2" required></textarea>
             </div>
-            
-            <div class="flex items-center">
-                <input type="checkbox" required class="w-4 h-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500">
-                <span class="ml-2 text-sm text-gray-600">I agree to the <a href="#" class="text-orange-600 hover:text-orange-500">Terms & Conditions</a></span>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" required>
             </div>
-            
-            <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-all shadow-md active:scale-[0.98]">
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" name="password2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" required>
+            </div>
+
+            <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-all">
                 Sign Up
             </button>
         </form>
-        
         <p class="text-center mt-6 text-sm text-gray-600">
             Already have an account? <a href="{% url 'accounts:login' %}" class="text-orange-600 hover:text-orange-500 font-medium">Log in</a>
         </p>

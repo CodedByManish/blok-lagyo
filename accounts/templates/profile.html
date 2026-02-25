@@ -14,7 +14,7 @@
                             {% if user.profile_picture %}
                                 <img src="{{ user.profile_picture.url }}" class="w-full h-full object-cover">
                             {% else %}
-                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250&h=250&fit=crop" class="w-full h-full object-cover">
+                                <img src="{{ MEDIA_URL }}images/profiles/default-PP.png" class="w-full h-full object-cover scale-150">
                             {% endif %}
                             
                             <label for="id_profile_picture" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
@@ -24,7 +24,7 @@
                             </label>
                         </div>
                         <div class="pt-4">
-                            <h2 class="text-2xl font-black text-gray-800">@{{ user.username }}</h2>
+                            <h2 class="text-2xl font-black text-gray-800">{{ user.first_name }} {{ user.last_name }}</h2>
                             <p class="text-sm font-bold text-gray-400">Personal Account Details</p>
                         </div>
                     </div>
@@ -85,17 +85,29 @@
                                 {{ forloop.counter }}
                             </div>
                             <div>
-                                <p class="font-black text-gray-800 text-sm">Order Confirmed</p>
+                                <p class="font-black text-gray-800 text-sm">Order </p>
                                 <p class="text-[10px] text-gray-400 font-black uppercase tracking-tight">
                                     {{ order.date|date:"F d, Y" }}
                                 </p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="font-black text-gray-900">Rs {{ order.total_paid }}</p>
-                            <span class="text-[9px] uppercase font-black px-2 py-0.5 bg-green-100 text-green-600 rounded-md">
-                                Successful
-                            </span>
+
+                        <div class="flex items-center gap-6">
+                            <div class="text-right">
+                                <p class="font-black text-gray-900">Rs {{ order.total_paid }}</p>
+                                <span class="text-[9px] uppercase font-black px-2 py-0.5 bg-yellow-100 text-yellow-600 rounded-md">
+                                    Pending
+                                </span>
+                            </div>
+
+                            <a href="{% url 'checkout:cancel_order' order.id %}" 
+                               onclick="return confirm('Are you sure you want to cancel this order? This will delete the transaction from your history.')"
+                               class="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                               title="Cancel Order">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </a>
                         </div>
                     </div>
                     {% endfor %}
@@ -108,6 +120,7 @@
             </div>
         </div>
 </div>
+
 <style>
     input[type="text"], input[type="email"], input[type="tel"], textarea {
         width: 100%;

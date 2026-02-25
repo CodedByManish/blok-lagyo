@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils import timezone
 from decimal import Decimal
+from checkout.models import Order
 
 #Paypal imports
 from paypal.standard.forms import PayPalPaymentsForm
@@ -19,15 +20,17 @@ from django_esewa import EsewaPayment
 from products.models import Product  #
 
 @login_required
+@login_required
 def checkout(request):
     """
-    Main checkout view that displays the form and handles eSewa.
+    Main checkout view that handles Form display, eSewa, and COD.
     """
     cart = request.session.get('cart', {})
     if not cart:
         messages.error(request, "Your cart is empty.")
         return redirect(reverse('products:index'))
 
+    # Re-calculate totals (always do this on server-side)
     cart_items = []
     total = Decimal('0.00')
     for product_id, quantity in cart.items():
@@ -46,10 +49,14 @@ def checkout(request):
 
     if request.method == "POST":
         order_form = OrderForm(request.POST)
+        payment_method = request.POST.get('payment_method') # Get the clicked button value
+
         if order_form.is_valid():
             order = order_form.save(commit=False)
             order.user = request.user  
             order.total_paid = final_total
+            # Optional: if your Order model has a payment_method field, save it:
+            # order.payment_method = payment_method 
             order.save()
             
             for item in cart_items:
@@ -59,9 +66,14 @@ def checkout(request):
                     quantity=item['quantity']
                 )
 
-            # eSewa Logic
+            # --- NEW LOGIC FOR CASH ON DELIVERY ---
+            if payment_method == 'cod':
+                request.session['cart'] = {} # Clear cart
+                messages.success(request, f"Order #{order.id} placed successfully via Cash on Delivery!")
+                return redirect(reverse('accounts:profile')) # Redirect to profile to see the order
+
+            # --- ESEWA LOGIC (Only runs if not COD) ---
             transaction_uuid = f"ORDER-{order.id}-{int(timezone.now().timestamp())}"
-            # Official eSewa v2 Test Key
             CORRECT_TEST_KEY = "8gBm/:&EnhH.1/q" 
             
             payment = EsewaPayment(
@@ -87,6 +99,7 @@ def checkout(request):
     else:
         order_form = OrderForm()
 
+    # Context for GET request
     context = {
         'order_form': order_form,
         'cart_items': cart_items,
@@ -245,3 +258,12 @@ def paypal_success(request):
 def paypal_cancel(request):
     messages.error(request, "Payment cancelled.")
     return redirect('checkout:checkout')
+
+@login_required
+def cancel_order(request, order_id):
+
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    order.delete()
+    messages.success(request, f"Order #{order_id} has been cancelled and removed.")
+    return redirect('accounts:profile')

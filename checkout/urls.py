@@ -17,6 +17,9 @@ urlpatterns = [
     path('paypal-success/', views.paypal_success, name='paypal_success'),
     path('paypal-cancel/', views.paypal_cancel, name='paypal_cancel'),
 
+    #COD
+    path('order/cancel/<int:order_id>/', views.cancel_order, name='cancel_order'),
+    
     # REQUIRED for IPN
     path('paypal/', include('paypal.standard.ipn.urls')),
 ]

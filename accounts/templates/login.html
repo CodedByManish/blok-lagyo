@@ -27,11 +27,11 @@
             {% endif %}
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <input type="text" name="username_or_email" 
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <input type="email" name="email" 
                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" 
-                       placeholder="Enter your details" required>
-                <span class="text-red-500 text-xs">{{ user_form.username_or_email.errors }}</span>
+                       placeholder="Enter your email" required>
+                <span class="text-red-500 text-xs">{{ user_form.email.errors }}</span>
             </div>
             
             <div>
